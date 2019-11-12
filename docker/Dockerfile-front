@@ -3,14 +3,14 @@ FROM node:11-alpine as build
 RUN npm install -g yarn
 
 RUN mkdir /app
-COPY forum-front/yarn.lock forum-front/package.json /app/
+COPY forum-front/package.json forum-front/yarn.lock /app/
 
 WORKDIR /app
-RUN yarn install
+RUN yarn install --frozen-lockfile
 
 COPY forum-front/. /app/
 RUN yarn build
-RUN find build -type d -exec chmod -v 755 {} \; && find build -type f -exec chmod -v 644 {} \;
+# RUN find build -type d -exec chmod -v 755 {} \; && find build -type f -exec chmod -v 644 {} \;
 
 FROM alpine:3.10
 COPY --from=build /app/build /front
