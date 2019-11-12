@@ -1,0 +1,20 @@
+FROM node:11-alpine as build
+
+RUN npm install -g yarn
+
+RUN mkdir /app
+COPY forum-front/yarn.lock forum-front/package.json /app/
+
+WORKDIR /app
+RUN yarn install
+
+COPY forum-front/. /app/
+RUN yarn build
+RUN find build -type d -exec chmod -v 755 {} \; && find build -type f -exec chmod -v 644 {} \;
+
+FROM alpine:3.10
+COPY --from=build /app/build /front
+
+VOLUME /volume
+WORKDIR /front
+CMD cp -vr /front/. /volume
