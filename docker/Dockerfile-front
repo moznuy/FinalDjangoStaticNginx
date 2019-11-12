@@ -1,5 +1,6 @@
 FROM node:11-alpine as build
 
+RUN npm config set unsafe-perm true
 RUN npm install -g yarn
 
 RUN mkdir /app
