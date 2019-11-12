@@ -1,0 +1,22 @@
+version: '3.5'
+
+services:
+  django:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile-django
+    volumes:
+      - Static:/tmp/static
+
+  nginx:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile-nginx
+    volumes:
+      - Static:/volume
+    ports:
+      - 8000:80
+
+
+volumes:
+  Static:
